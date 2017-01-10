@@ -1,6 +1,8 @@
 <template>
 	<div class="column is-two-thirds">
-    	
+    	<div class="notification">
+    		<p>{{copy_superior}}</p>
+    	</div>
     	<table class="table is-stripped">
     		<thead>
 	    		<tr>
@@ -27,7 +29,8 @@ import info from '../data/info.js'
 		name: 'content-component',
 		data(){
 			return {
-				tarifas: info.tarifas
+				tarifas: info.tarifas,
+				copy_superior: info.copy_superior
 			}
 		}
 		

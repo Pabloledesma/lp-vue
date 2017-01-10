@@ -1,5 +1,6 @@
 <style>
 	.top-nav { background: #0d304f;}
+	.nav-item img { max-height:100% !important }
 </style>
 <template>
 	<div>
