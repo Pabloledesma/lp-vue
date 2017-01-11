@@ -19,7 +19,8 @@
 					    <select 
 					    	v-model="origin" 
 					    	v-validate 
-					    	data-vv-rules="required" 
+					    	data-vv-rules="required"
+					    	data-vv-as="ciudad de origen" 
 					    	name="origin"
 							:class="{'input': true, 'is-danger': errors.has('origin') }"
 					    >

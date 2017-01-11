@@ -11,11 +11,13 @@ Vue.use(VeeValidate)
 */
 const dictionary = {
 	en: {
-        city_origin_null: "Select a city of origin",    
-        destination_city_null: "Select the destination city",
-        origin_destination: "The destination city should be different from the city of origin",
-        departure_date: "Select departure",
-        return_date: "Select Return Date"
+		messages: {
+	        city_origin_null: "Select a city of origin",    
+	        destination_city_null: "Select the destination city",
+	        origin_destination: "The destination city should be different from the city of origin",
+	        departure_date: "Select departure",
+	        return_date: "Select Return Date"
+		}
   	},
   	es: {
         city_origin_null: "Seleccione la ciudad de origen",
