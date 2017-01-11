@@ -92,6 +92,33 @@
 					</span>
 				</div>
 			</div>
+			<div class="control is-grouped">
+				<div class="control">
+				  	<label class="label">Adultos<br>(12+)</label>
+				  	<span class="select">
+				    	<select v-model="adults">
+				      		<option v-for="number in numbers" :value="number">{{number}}</option>
+				    	</select>
+				  	</span>
+				</div>
+				<div class="control">
+					<label class="label">Niños<br>(2-11)</label>
+				  	<span class="select">
+				    	<select v-model="childs">
+				      		<option v-for="number in numbers" :value="number">{{number}}</option>
+				    	</select>
+				  	</span>
+				</div>
+				<div class="contro">
+					<label class="label">Infantes<br>(0-1)</label>
+				   	<span class="select">
+				    	<select v-model="infants">
+				      		<option v-for="number in numbers" :value="number">{{number}}</option>
+				    	</select>
+				  	</span>
+
+				</div>
+			</div>
 
 			<div class="control">
 			    <button class="button is-primary">Buscar Vuelo</button>
@@ -103,19 +130,26 @@
 <script>
 import info from '../data/info'
 import Datepicker from 'vuejs-datepicker'
+import Form from '../core/Form'
 
 	export default {
 		name: 'booking',
 		data(){
 			return {
+				
 				typeOfTrip: 'OW',
 				origin: '',
 				destination: '',
 				classOfTrip: 'economy',
 				departureDate: '',
 				returnDate: '',
+				adults: 1,
+				childs: 0,
+				infants: 0,
+				 
 				fromCities: info.fromcities,
 				toCities: info.tocities,
+				numbers: [0,1,2,3,4,5,6,7,8],
 				disabled: {
 					to: info.departure_date,
 					from: info.return_date
@@ -136,6 +170,8 @@ import Datepicker from 'vuejs-datepicker'
 	                alert('From Submitted!');
 	            });
         	}
+
 		}
+		
 	}
 </script>
