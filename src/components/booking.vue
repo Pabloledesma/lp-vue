@@ -28,7 +28,8 @@
 					      	<option v-for="city in fromCities" :value="city.id">{{city.name}}</option>
 					    </select>
 				  	</span>
-					<span v-show="errors.has('origin')" class="help is-danger">{{ errors.first('origin') }}</span>
+					<!-- <span v-show="errors.has('origin')" class="help is-danger">{{ errors.first('origin') }}</span> -->
+					<span v-show="errors.has('origin')" class="help is-danger">{{ $t('messages.cityOriginNull') }}</span>
 				</div>
 
 				<div class="control">
@@ -44,7 +45,8 @@
 					      	<option v-for="city in toCities" :value="city.id">{{city.name}}</option>
 					    </select>
 				  	</span>
-					<span v-show="errors.has('destination')" class="help is-danger">{{ errors.first('destination') }}</span>
+					<!-- <span v-show="errors.has('destination')" class="help is-danger">{{ errors.first('destination') }}</span> -->
+					<span v-show="errors.has('destination')" class="help is-danger">{{ $t('messages.destinationCityNull') }}</span>
 				</div>
 			</div>
 
@@ -71,9 +73,10 @@
 						name="departureDate"
 						:class="{'input': true, 'is-danger': errors.has('departureDate') }"
 					></datepicker>
-					<span v-show="errors.has('departureDate')" class="help is-danger">
-						{{ errors.first('departureDate') }}
-					</span>
+					<!-- <span v-show="errors.has('departureDate')" class="help is-danger">{{ errors.first('departureDate') }}</span> -->
+					<span v-show="errors.has('departureDate')" class="help is-danger">{{ $t('messages.departureDateRequired') }}</span>
+					<span v-show="! before" class="help is-danger">{{ $t('messages.departureDateBefore') }}</span>
+					
 				</div>
 
 				<div class="control" v-if="typeOfTrip == 'RT'">
@@ -87,9 +90,8 @@
 						name="returnDate"
 						:class="{'input': true, 'is-danger': errors.has('returnDate') }"
 					></datepicker>
-					<span v-show="errors.has('returnDate')" class="help is-danger">
-						{{ errors.first('returnDate') }}
-					</span>
+					<span v-show="errors.has('returnDate')" class="help is-danger">{{ $t('messages.returnDateRequired') }}</span>
+					
 				</div>
 			</div>
 			<div class="control is-grouped">
@@ -121,7 +123,7 @@
 			</div>
 
 			<div class="control">
-			    <button class="button is-primary">Buscar Vuelo</button>
+			    <button class="button is-primary" v-if="before">Buscar Vuelo</button>
 			</div>
 			
 		</form>
@@ -130,7 +132,6 @@
 <script>
 import info from '../data/info'
 import Datepicker from 'vuejs-datepicker'
-import Form from '../core/Form'
 
 	export default {
 		name: 'booking',
@@ -161,16 +162,24 @@ import Form from '../core/Form'
 		},
 		methods: {
 			validateBeforeSubmit() {
+			
             	// Validate All returns a promise and provides the validation result.                
 	            this.$validator.validateAll().then(success => {
 	                if (! success) {
-	                    // handle error
+	                    //console.log(this.errors)
 	                    return;
 	                }
+
+	                //Send info
 	                alert('From Submitted!');
 	            });
         	}
 
+		},
+		computed: {
+			before(){
+				return (this.departureDate < this.returnDate);
+			}
 		}
 		
 	}
