@@ -47,7 +47,9 @@ let info = {
 
     departure_date: new Date(2017, 1 - 1, 25),
 
-	return_date: new Date(2017, 3 - 1, 23)
+	return_date: new Date(2017, 3 - 1, 23),
+
+    pageName: 'testPromotion'
 };
 
 export default info;

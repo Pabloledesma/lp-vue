@@ -123,7 +123,7 @@
 			</div>
 
 			<div class="control">
-			    <button class="button is-primary" v-if="before">Buscar Vuelo</button>
+			    <button class="button is-primary">Buscar Vuelo</button>
 			</div>
 			
 		</form>
@@ -147,14 +147,18 @@ import Datepicker from 'vuejs-datepicker'
 				adults: 1,
 				childs: 0,
 				infants: 0,
-				 
+				promoCode: '', 
+				flexibleSearch: true,
 				fromCities: info.fromcities,
 				toCities: info.tocities,
 				numbers: [0,1,2,3,4,5,6,7,8],
 				disabled: {
 					to: info.departure_date,
 					from: info.return_date
-				}
+				},
+				d1: this.getCookie('cname'),
+				pageName: info.pageName
+
 			};
 		},
 		components: {
@@ -163,6 +167,7 @@ import Datepicker from 'vuejs-datepicker'
 		methods: {
 			validateBeforeSubmit() {
 			
+
             	// Validate All returns a promise and provides the validation result.                
 	            this.$validator.validateAll().then(success => {
 	                if (! success) {
@@ -170,16 +175,109 @@ import Datepicker from 'vuejs-datepicker'
 	                    return;
 	                }
 
+	                if( this.beforeRule() ){
+	                	this.goBooking();
+	                }
+
 	                //Send info
 	                alert('From Submitted!');
 	            });
+        	},
+
+        	/**
+			* La fecha de salida debe ser menor o igual que la fecha de regreso
+			* y aplica solo cuando el tipo de vuelo es RT
+			*/
+        	beforeRule(){
+        		return ( this.typeOfTrip == "RT" ) && this.before;
+        	},
+
+        	/*
+			* Busca el nombre de una cookie y retorna su valor
+			*
+			* @cname  String  Nombre de la cookie
+			***/
+			getCookie(cname) {
+			    var name = cname + "=";
+			    var ca = document.cookie.split(';');
+			    for(var i = 0; i <ca.length; i++) {
+			        var c = ca[i];
+			        while (c.charAt(0)==' ') {
+			            c = c.substring(1);
+			        }
+			        if (c.indexOf(name) == 0) {
+			            return c.substring(name.length,c.length);
+			        }
+			    }
+			    return "";
+			},
+
+        	/**
+        	* Recopilación de información para el envío del formulario
+        	*/
+        	goBooking(){
+        		
+			    let url = '';
+
+				url += "https://bookings.copaair.com/CMGS/AirLowFareSearchExternal.do?utm_campaign="+
+					this.utmCampaign+"&d1="+this.d1+"&tripType="+this.typeOfTrip+"&outboundOption.originLocationCode="+
+					this.origin+"&outboundOption.destinationLocationCode="+this.destination+"&outboundOption.departureDay="+
+					this.departureDate.getDay()+"&outboundOption.departureMonth="+this.departureDate.getMonth()+"&outboundOption.departureYear="+
+					this.departureDate.getYear()+"&inboundOption.destinationLocationCode="+this.origin+"&inboundOption.originLocationCode="+this.destination;
+				
+
+				if( this.typeOfTrip == "RT" ){
+					url += "&inboundOption.departureDay="+this.returnDate.getDay()+"&inboundOption.departureMonth="+
+						this.returnDate.getMonth()+"&inboundOption.departureYear="+this.returnDate.getYear();
+				}
+
+				if(this.promoCode){
+					url += "&coupon=" + this.promoCode;
+				}
+
+				url += "&flexibleSearch="+
+						this.flexibleSearch+"&cabinClass="+this.classOfTrip+"&guestTypes[0].type=ADT&guestTypes[0].amount="+
+						this.adults+"&guestTypes[1].type=CNN&guestTypes[1].amount="+
+						this.childs+"&guestTypes[2].type=INF&guestTypes[2].amount="+
+						this.infants+"&pos=CM"+this.storeFront+"&lang="+ window.lang;
+
+				window.open(url);
+			
         	}
 
 		},
 		computed: {
+			/**
+			* La definición de esta variable depende de la cookie cname
+			**/
+			utmCampaign(){
+					
+				if( this.d1 === "" ){
+					d1 =  s.pageName;
+					utm_campaign = s.pageName;
+				}
+			},
+
+			/**
+			* Comparación de las fechas del formulario
+			**/
 			before(){
-				return  ( this.typeOfTrip == "RT" ) && (this.departureDate != '') && (this.departureDate <= this.returnDate);
+				return  (this.departureDate != '') && (this.departureDate <= this.returnDate);
+			},
+
+			/**
+			* Según los países seleccionados, se determinará el storefront (PENDIENTE)
+			**/
+			storeFront(){
+
+				// if(selected != 'CO' && selected != 'BR' && selected != 'CA' && selected != 'US'){
+				// 	return 'GS';
+				// } else {
+				// 	return selected;
+				// }
 			}
+
+			// AGREGAR LA FUNCIONALIDAD DE QUE CUANDO EL USUARIO SELECCIONE UNA PROMOCIÓN DE LA TABLA, EL FORMULARIO TOME LA INFORMACIÓN DISPONIBLE DE LA PROMO
 		}
 		
 	}
