@@ -75,7 +75,7 @@
 					></datepicker>
 					<!-- <span v-show="errors.has('departureDate')" class="help is-danger">{{ errors.first('departureDate') }}</span> -->
 					<span v-show="errors.has('departureDate')" class="help is-danger">{{ $t('messages.departureDateRequired') }}</span>
-					<span v-show="! before" class="help is-danger">{{ $t('messages.departureDateBefore') }}</span>
+					<span v-show="(departureDate && returnDate) && ! before" class="help is-danger">{{ $t('messages.departureDateBefore') }}</span>
 					
 				</div>
 
@@ -138,7 +138,7 @@ import Datepicker from 'vuejs-datepicker'
 		data(){
 			return {
 				
-				typeOfTrip: 'OW',
+				typeOfTrip: 'RT',
 				origin: '',
 				destination: '',
 				classOfTrip: 'economy',
@@ -178,7 +178,7 @@ import Datepicker from 'vuejs-datepicker'
 		},
 		computed: {
 			before(){
-				return (this.departureDate < this.returnDate);
+				return  ( this.typeOfTrip == "RT" ) && (this.departureDate != '') && (this.departureDate <= this.returnDate);
 			}
 		}
 		
