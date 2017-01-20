@@ -1,129 +1,116 @@
 <template>
-	<div class="column">
-		<h3>Reserva tu vuelo ahora</h3>
+	<div class="col-md-4 booking">
 		<form @submit.prevent="validateBeforeSubmit">
-			<p class="control">
-			  <label class="radio">
+			<div class="booking-header">
+				<p>Reserva tu vuelo ahora</p>
+			</div>
+			<div class="col-md-12 radios">
+			  <label class="radio-inline">
 			    <input type="radio" name="typeOfTrip" value="RT" v-model="typeOfTrip">
 			    Ida y vuelta
 			  </label>
-			  <label class="radio">
+			  <label class="radio-inline">
 			    <input type="radio" name="typeOfTrip" value="OW" v-model="typeOfTrip">
 			    Una Vía
 			  </label>
-			</p>
-
-			<div class="control is-grouped">
-				<div class="control">
-				  	<span class="select">
-					    <select 
-					    	v-model="origin" 
-					    	v-validate 
-					    	data-vv-rules="required"
-					    	data-vv-as="ciudad de origen" 
-					    	name="origin"
-							:class="{'input': true, 'is-danger': errors.has('origin') }"
-					    >
-					      	<option value="">Desde</option>
-					      	<option v-for="city in fromCities" :value="city.id">{{city.name}}</option>
-					    </select>
-				  	</span>
-					<!-- <span v-show="errors.has('origin')" class="help is-danger">{{ errors.first('origin') }}</span> -->
-					<span v-show="errors.has('origin')" class="help is-danger">{{ $t('messages.cityOriginNull') }}</span>
-				</div>
-
-				<div class="control">
-				  	<span class="select">
-					    <select 
-					    	v-model="destination" 
-					    	v-validate 
-					    	data-vv-rules="required" 
-					    	name="destination"
-							:class="{'input': true, 'is-danger': errors.has('destination') }"
-					    >
-					      	<option value="">Hacia</option>
-					      	<option v-for="city in toCities" :value="city.id">{{city.name}}</option>
-					    </select>
-				  	</span>
-					<!-- <span v-show="errors.has('destination')" class="help is-danger">{{ errors.first('destination') }}</span> -->
-					<span v-show="errors.has('destination')" class="help is-danger">{{ $t('messages.destinationCityNull') }}</span>
-				</div>
 			</div>
 
-			<p class="control">
-			  <label class="radio">
-			    <input type="radio" name="classOfTrip" value="Business" v-model="classOfTrip">
-			    Clase ejecutiva
-			  </label>
-			  <label class="radio">
-			    <input type="radio" name="classOfTrip" value="Economy" v-model="classOfTrip">
-			    Clase económica
-			  </label>
-			</p>
+			<div :class="{'form-group': true, 'col-md-6':true, 'has-error': errors.has('origin')}">
+			    <select 
+			    	v-model="origin" 
+			    	v-validate 
+			    	data-vv-rules="required"
+			    	data-vv-as="ciudad de origen" 
+			    	name="origin"
+					class="form-control input-sm"
+			    >
+			      	<option value="">Desde</option>
+			      	<option v-for="city in fromCities" :value="city.id">{{city.name}}</option>
+			    </select>
+				<!-- <span v-show="errors.has('origin')" class="help is-danger">{{ errors.first('origin') }}</span> -->
+				<p v-show="errors.has('origin')" class="text-danger">{{ $t('messages.cityOriginNull') }}</p>
+			</div>
 
-			<div class="control is-grouped">
-				<div class="control">
-					<label class="label">Salida</label>
-					<datepicker 
-						v-model="departureDate"
-						v-validate
-						data-vv-rules="required" 
-						:disabled="disabled" 
-						language="es"
-						name="departureDate"
-						:class="{'input': true, 'is-danger': errors.has('departureDate') }"
-					></datepicker>
-					<!-- <span v-show="errors.has('departureDate')" class="help is-danger">{{ errors.first('departureDate') }}</span> -->
-					<span v-show="errors.has('departureDate')" class="help is-danger">{{ $t('messages.departureDateRequired') }}</span>
-					<span v-show="(departureDate && returnDate) && ! before" class="help is-danger">{{ $t('messages.departureDateBefore') }}</span>
-					
-				</div>
+			<div :class="{'form-group': true, 'col-md-6':true, 'has-error': errors.has('destination')}">
+			    <select 
+			    	v-model="destination" 
+			    	v-validate 
+			    	data-vv-rules="required" 
+			    	name="destination"
+					class="form-control"
+			    >
+			      	<option value="">Hacia</option>
+			      	<option v-for="city in toCities" :value="city.id">{{city.name}}</option>
+			    </select>
+				<!-- <span v-show="errors.has('destination')" class="help is-danger">{{ errors.first('destination') }}</span> -->
+				<p v-show="errors.has('destination')" class="text-danger">{{ $t('messages.destinationCityNull') }}</p>
+			</div>
+				
+			
+			<div class="col-md-12 radios">
+				<label class="radio-inline">
+				    <input type="radio" name="classOfTrip" value="business" v-model="classOfTrip">
+				    Clase ejecutiva
+				</label>
+				<label class="radio-inline">
+				    <input type="radio" name="classOfTrip" value="economy" v-model="classOfTrip">
+				    Clase económica
+				</label>
+				
+			</div>
 
-				<div class="control" v-if="typeOfTrip == 'RT'">
+			<div :class="{'form-group': true, 'col-md-6':true, 'has-error': errors.has('departureDate')}">
+				<label class="label">Salida</label>
+				<input 
+					type="text"
+					id="departureDate" 
+					v-model="departureDate"
+					v-validate
+					data-vv-rules="required" 
+					name="departureDate"
+					class="form-control datepicker"
+				>
+				<!-- <span v-show="errors.has('departureDate')" class="help is-danger">{{ errors.first('departureDate') }}</span> -->
+				<p v-show="errors.has('departureDate')" class="text-danger">{{ $t('messages.departureDateRequired') }}</p>
+				<p v-show="(departureDate && returnDate) && ! before" class="text-danger">{{ $t('messages.departureDateBefore') }}</p>
+			</div>
+
+				<div :class="{'form-group': true, 'col-md-6':true, 'has-error': errors.has('returnDate')}" v-if="typeOfTrip == 'RT'">
 					<label class="label">Regreso</label>
-					<datepicker 
+					<input
+						type="text"
+						id="returnDate" 
 						v-model="returnDate" 
 						v-validate
 						data-vv-rules="required"
-						:disabled="disabled" 
-						language="es"
 						name="returnDate"
 						:class="{'input': true, 'is-danger': errors.has('returnDate') }"
-					></datepicker>
-					<span v-show="errors.has('returnDate')" class="help is-danger">{{ $t('messages.returnDate') }}</span>
-					
-				</div>
-			</div>
-			<div class="control is-grouped">
-				<div class="control">
-				  	<label class="label">Adultos<br>(12+)</label>
-				  	<span class="select">
-				    	<select v-model="adults">
-				      		<option v-for="number in numbers" :value="number">{{number}}</option>
-				    	</select>
-				  	</span>
-				</div>
-				<div class="control">
-					<label class="label">Niños<br>(2-11)</label>
-				  	<span class="select">
-				    	<select v-model="childs">
-				      		<option v-for="number in numbers" :value="number">{{number}}</option>
-				    	</select>
-				  	</span>
-				</div>
-				<div class="contro">
-					<label class="label">Infantes<br>(0-1)</label>
-				   	<span class="select">
-				    	<select v-model="infants">
-				      		<option v-for="number in numbers" :value="number">{{number}}</option>
-				    	</select>
-				  	</span>
+					>
+	
+					<p v-show="errors.has('returnDate')" class="text-danger">{{ $t('messages.returnDateRequired') }}</p>
 
 				</div>
-			</div>
+				<div class="form-group col-md-4">
+				  	<label class="label">Adultos</label>
+			    	<select v-model="adults" class="form-control">
+			      		<option v-for="number in numbers" :value="number">{{number}}</option>
+			    	</select>
+				</div>
+				<div class="form-group col-md-4">
+					<label class="label">Niños</label>
+			    	<select v-model="childs" class="form-control">
+			      		<option v-for="number in numbers" :value="number">{{number}}</option>
+			    	</select>
+				</div>
+				<div class="form-group col-md-4">
+					<label class="label">Infantes</label>
+			    	<select v-model="infants" class="form-control">
+			      		<option v-for="number in numbers" :value="number">{{number}}</option>
+			    	</select>
+				</div>
 
-			<div class="control">
-			    <button class="button is-primary">Buscar Vuelo</button>
+			<div class="form-group text-center submit">
+			    <button type="submit" class="btn btn-primary">Buscar Vuelo</button>
 			</div>
 			
 		</form>
@@ -274,8 +261,13 @@ import Datepicker from 'vuejs-datepicker'
 			utmCampaign(){
 					
 				if( this.d1 === "" ){
+<<<<<<< HEAD
 					this.d1 =  this.pageName;
 					this.utm_campaign = this.pageName;
+=======
+					this.d1 =  s.pageName;
+					utm_campaign = s.pageName;
+>>>>>>> retocando-estilos
 				}
 			},
 
@@ -306,7 +298,7 @@ import Datepicker from 'vuejs-datepicker'
 					return selected;
 				}
 			}
-
+			
 			// AGREGAR LA FUNCIONALIDAD DE QUE CUANDO EL USUARIO SELECCIONE UNA PROMOCIÓN DE LA TABLA, EL FORMULARIO TOME LA INFORMACIÓN DISPONIBLE DE LA PROMO
 
 			// https://bookings.copaair.com/CMGS/AirLowFareSearchExternal.do?utm_campaign=undefined&d1=testPromotion&tripType=RT&outboundOption.originLocationCode=CLO&outboundOption.destinationLocationCode=LIM&outboundOption.departureDay=26&outboundOption.departureMonth=1&outboundOption.departureYear=2017&inboundOption.destinationLocationCode=CLO&inboundOption.originLocationCode=LIM&inboundOption.departureDay=26&inboundOption.departureMonth=1&inboundOption.departureYear=2017&flexibleSearch=true&cabinClass=economy&guestTypes[0].type=ADT&guestTypes[0].amount=1&guestTypes[1].type=CNN&guestTypes[1].amount=0&guestTypes[2].type=INF&guestTypes[2].amount=0&pos=CMGS&lang=es
@@ -316,3 +308,34 @@ import Datepicker from 'vuejs-datepicker'
 		
 	}
 </script>
+<style>
+	.booking {margin-top: -119px}
+	.booking-header {
+	    height: 41px;
+	    width: 100%;
+	    background-color: #005aa3;
+	    color:#fff;
+	}
+
+	.booking-header > p{
+		text-align: center;
+    	font-size: 19px;
+    	padding-top: 7px;
+	}
+
+	.text-danger { font-size: 0.8em }
+
+	.radio-inline, .label {
+		font-size: 12px;
+	}
+
+	.label { color:#333; }
+
+	form {
+		background-color: #f5f5f5;
+	}
+	.radios { padding:10px; }
+
+	.submit { padding:20px; }
+
+</style>

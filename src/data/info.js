@@ -43,6 +43,12 @@ let info = {
     		destino: 'PTY',
     		origen: 'BOG'
     	},
+        {
+            descripcion: 'Tarifa 5',
+            precio: 456,
+            destino: 'CLO',
+            origen: 'PTY'
+        }
     ],
 
     departure_date: new Date(2017, 1 - 1, 25),

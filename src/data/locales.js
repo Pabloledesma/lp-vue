@@ -6,7 +6,7 @@ let locales = {
 	        originDestination: "The destination city should be different from the city of origin",
 	        departureDateRequired: "Select departure",
 	        departureDateBefore: "Departure date must be before the return date",
-	        returnDate: "Select Return Date"
+	        returnDateRequired: "Select Return Date"
   		}
   	},
   es: {
@@ -16,7 +16,7 @@ let locales = {
 	        originDestination: "La ciudad de destino debe ser diferente de la de origen",
 	        departureDateRequired: "Seleccione la fecha de salida",
 	        departureDateBefore: "La fecha de salida debe ser anterior a la fecha de llegada",
-	        returnDate: "Seleccione la fecha de regreso"
+	        returnDateRequired: "Seleccione la fecha de regreso"
   		}
   	},
   pt: {
@@ -26,7 +26,7 @@ let locales = {
 	        originDestination: "A cidade de destino deve ser diferente a partir da cidade de origem",
 	        departureDateRequired: "Selecione a partida",
 	        departureDateBefore: "A partida deve ser anterior à data de chegada",
-	        returnDate: "Selecionar data de retorno"
+	        returnDateRequired: "Selecionar data de retorno"
   		}
   	}
 };
