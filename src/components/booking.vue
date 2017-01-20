@@ -276,7 +276,7 @@ import Datepicker from 'vuejs-datepicker'
 				// 	return selected;
 				// }
 			}
-
+			
 			// AGREGAR LA FUNCIONALIDAD DE QUE CUANDO EL USUARIO SELECCIONE UNA PROMOCIÓN DE LA TABLA, EL FORMULARIO TOME LA INFORMACIÓN DISPONIBLE DE LA PROMO
 		}
 		
