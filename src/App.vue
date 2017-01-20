@@ -4,7 +4,8 @@
     <slider></slider>
     
     <div class="container">
-      <div class="columns">
+      <div class="row">
+        
         <content-component></content-component>
         <booking></booking>
       </div>

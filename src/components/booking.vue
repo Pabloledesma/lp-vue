@@ -1,5 +1,5 @@
 <template>
-	<div class="column">
+	<div class="col-md-4">
 		<h3>Reserva tu vuelo ahora</h3>
 		<form @submit.prevent="validateBeforeSubmit">
 			<p class="control">
