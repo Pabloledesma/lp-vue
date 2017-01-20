@@ -52,11 +52,11 @@
 
 			<p class="control">
 			  <label class="radio">
-			    <input type="radio" name="classOfTrip" value="business" v-model="classOfTrip">
+			    <input type="radio" name="classOfTrip" value="Business" v-model="classOfTrip">
 			    Clase ejecutiva
 			  </label>
 			  <label class="radio">
-			    <input type="radio" name="classOfTrip" value="economy" v-model="classOfTrip">
+			    <input type="radio" name="classOfTrip" value="Economy" v-model="classOfTrip">
 			    Clase económica
 			  </label>
 			</p>
@@ -90,7 +90,7 @@
 						name="returnDate"
 						:class="{'input': true, 'is-danger': errors.has('returnDate') }"
 					></datepicker>
-					<span v-show="errors.has('returnDate')" class="help is-danger">{{ $t('messages.returnDateRequired') }}</span>
+					<span v-show="errors.has('returnDate')" class="help is-danger">{{ $t('messages.returnDate') }}</span>
 					
 				</div>
 			</div>
@@ -141,7 +141,7 @@ import Datepicker from 'vuejs-datepicker'
 				typeOfTrip: 'RT',
 				origin: '',
 				destination: '',
-				classOfTrip: 'economy',
+				classOfTrip: 'Economy',
 				departureDate: '',
 				returnDate: '',
 				adults: 1,
@@ -166,8 +166,6 @@ import Datepicker from 'vuejs-datepicker'
 		},
 		methods: {
 			validateBeforeSubmit() {
-			
-
             	// Validate All returns a promise and provides the validation result.                
 	            this.$validator.validateAll().then(success => {
 	                if (! success) {
@@ -178,9 +176,6 @@ import Datepicker from 'vuejs-datepicker'
 	                if( this.beforeRule() ){
 	                	this.goBooking();
 	                }
-
-	                //Send info
-	                alert('From Submitted!');
 	            });
         	},
 
@@ -222,13 +217,13 @@ import Datepicker from 'vuejs-datepicker'
 				url += "https://bookings.copaair.com/CMGS/AirLowFareSearchExternal.do?utm_campaign="+
 					this.utmCampaign+"&d1="+this.d1+"&tripType="+this.typeOfTrip+"&outboundOption.originLocationCode="+
 					this.origin+"&outboundOption.destinationLocationCode="+this.destination+"&outboundOption.departureDay="+
-					this.departureDate.getDay()+"&outboundOption.departureMonth="+this.departureDate.getMonth()+"&outboundOption.departureYear="+
-					this.departureDate.getYear()+"&inboundOption.destinationLocationCode="+this.origin+"&inboundOption.originLocationCode="+this.destination;
+					this.departureDay+"&outboundOption.departureMonth="+this.departureMonth+"&outboundOption.departureYear="+
+					this.departureYear+"&inboundOption.destinationLocationCode="+this.origin+"&inboundOption.originLocationCode="+this.destination;
 				
 
 				if( this.typeOfTrip == "RT" ){
-					url += "&inboundOption.departureDay="+this.returnDate.getDay()+"&inboundOption.departureMonth="+
-						this.returnDate.getMonth()+"&inboundOption.departureYear="+this.returnDate.getYear();
+					url += "&inboundOption.departureDay="+this.returnDay+"&inboundOption.departureMonth="+
+						this.returnMonth+"&inboundOption.departureYear="+this.returnYear;
 				}
 
 				if(this.promoCode){
@@ -241,20 +236,46 @@ import Datepicker from 'vuejs-datepicker'
 						this.childs+"&guestTypes[2].type=INF&guestTypes[2].amount="+
 						this.infants+"&pos=CM"+this.storeFront+"&lang="+ window.lang;
 
+				//console.log(url)
 				window.open(url);
 			
         	}
 
 		},
 		computed: {
+			departureDay(){
+				return this.departureDate.getDate()
+			},
+
+			departureMonth(){
+				return this.departureDate.getMonth() + 1
+			},
+
+			departureYear(){
+				return this.departureDate.getFullYear()
+			},
+
+			returnDay(){
+				return this.returnDate.getDate()
+			},
+
+			returnMonth(){
+				return this.returnDate.getMonth() + 1
+			},
+
+			returnYear(){
+				return this.returnDate.getFullYear()
+			},
+
 			/**
 			* La definición de esta variable depende de la cookie cname
+			* Si la cookie está vacia entonces se asigna el nombre de la página
 			**/
 			utmCampaign(){
 					
 				if( this.d1 === "" ){
-					d1 =  s.pageName;
-					utm_campaign = s.pageName;
+					this.d1 =  this.pageName;
+					this.utm_campaign = this.pageName;
 				}
 			},
 
@@ -269,15 +290,28 @@ import Datepicker from 'vuejs-datepicker'
 			* Según los países seleccionados, se determinará el storefront (PENDIENTE)
 			**/
 			storeFront(){
+				let selected = ''
 
-				// if(selected != 'CO' && selected != 'BR' && selected != 'CA' && selected != 'US'){
-				// 	return 'GS';
-				// } else {
-				// 	return selected;
-				// }
+				for( let i=0; i < this.fromCities; i++){
+					for( key in this.fromCities[i] ){
+						if( this.fromCities[i][key].indexOf(this.origin) != -1 ){
+							selected = this.fromCities[i].country
+						}
+					}
+				}
+
+				if(selected != 'CO' || selected != 'BR' || selected != 'CA' || selected != 'US'){
+					return 'GS';
+				} else {
+					return selected;
+				}
 			}
 
 			// AGREGAR LA FUNCIONALIDAD DE QUE CUANDO EL USUARIO SELECCIONE UNA PROMOCIÓN DE LA TABLA, EL FORMULARIO TOME LA INFORMACIÓN DISPONIBLE DE LA PROMO
+
+			// https://bookings.copaair.com/CMGS/AirLowFareSearchExternal.do?utm_campaign=undefined&d1=testPromotion&tripType=RT&outboundOption.originLocationCode=CLO&outboundOption.destinationLocationCode=LIM&outboundOption.departureDay=26&outboundOption.departureMonth=1&outboundOption.departureYear=2017&inboundOption.destinationLocationCode=CLO&inboundOption.originLocationCode=LIM&inboundOption.departureDay=26&inboundOption.departureMonth=1&inboundOption.departureYear=2017&flexibleSearch=true&cabinClass=economy&guestTypes[0].type=ADT&guestTypes[0].amount=1&guestTypes[1].type=CNN&guestTypes[1].amount=0&guestTypes[2].type=INF&guestTypes[2].amount=0&pos=CMGS&lang=es
+
+			// https://bookings.copaair.com/CMGS/AirLowFareSearchExternal.do?utm_campaign=testPromotion&d1=testPromotion&tripType=RT&outboundOption.originLocationCode=MGA&outboundOption.destinationLocationCode=SJO&outboundOption.departureDay=07&outboundOption.departureMonth=01&outboundOption.departureYear=2017&inboundOption.destinationLocationCode=MGA&inboundOption.originLocationCode=SJO&inboundOption.departureDay=15&inboundOption.departureMonth=02&inboundOption.departureYear=2017&flexibleSearch=true&cabinClass=Economy&guestTypes[0].type=ADT&guestTypes[0].amount=1&guestTypes[1].type=CNN&guestTypes[1].amount=0&guestTypes[2].type=INF&guestTypes[2].amount=0&pos=CMGS&lang=es
 		}
 		
 	}

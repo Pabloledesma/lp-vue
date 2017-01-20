@@ -1,19 +1,19 @@
 let info = {
     fromcities: [
-        {"name":"Medellín, CO", "id":"MDE"},
-        {"name":"Cali, CO", "id":"CLO"},
-        {"name":"Bogotá, CO", "id":"BGO"},
-        {"name":"Barranquilla, CO", "id":"BAQ"}
+        {"name":"Medellín, CO", "id":"MDE", "country": "CO"},
+        {"name":"Cali, CO", "id":"CLO", "country": "CO"},
+        {"name":"Bogotá, CO", "id":"BGO", "country": "CO"},
+        {"name":"Barranquilla, CO", "id":"BAQ", "country": "CO"}
     ],
                         
     tocities: [
-		{"name":"Aruba, AW", "id":"AUA"},
-		{"name":"Panamá, PA", "id":"PTY"},
-		{"name":"Lima, PE", "id":"LIM"},
-		{"name":"Miami, US", "id":"MIA"},
-		{"name":"Tampa, US", "id":"TPA"},
-		{"name":"San José, CR", "id":"SJO"},
-		{"name":"San Juan, PR", "id":"SJU"}
+		{"name":"Aruba, AW", "id":"AUA", "country": "AW"},
+		{"name":"Panamá, PA", "id":"PTY", "country": "PA"},
+		{"name":"Lima, PE", "id":"LIM", "country": "PE"},
+		{"name":"Miami, US", "id":"MIA", "country": "US"},
+		{"name":"Tampa, US", "id":"TPA", "country": "US"},
+		{"name":"San José, CR", "id":"SJO", "country": "CR"},
+		{"name":"San Juan, PR", "id":"SJU", "country": "PR"}
 		
     ],
 	copy_superior: "Compra tu boleto del 16 al 30 de diciembre del 2016 y viaja del 16 de diciembre del 2016 al 30 de junio del 2017.",
