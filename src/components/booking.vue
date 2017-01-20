@@ -261,13 +261,8 @@ import Datepicker from 'vuejs-datepicker'
 			utmCampaign(){
 					
 				if( this.d1 === "" ){
-<<<<<<< HEAD
 					this.d1 =  this.pageName;
 					this.utm_campaign = this.pageName;
-=======
-					this.d1 =  s.pageName;
-					utm_campaign = s.pageName;
->>>>>>> retocando-estilos
 				}
 			},
 
