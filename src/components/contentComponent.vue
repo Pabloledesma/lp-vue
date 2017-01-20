@@ -6,7 +6,7 @@
 		    	</div>
 			</div>
 			<div class="col-md-8">
-		    	<table class="table is-stripped">
+		    	<table class="table table-striped">
 		    		<thead>
 			    		<tr>
 			    			<th>Origen</th>
@@ -18,7 +18,7 @@
 		    			<tr v-for="tarifa in tarifas">
 		    				<td>{{tarifa.origen}}</td>
 		    				<td>{{tarifa.destino}}</td>
-		    				<td>{{tarifa.precio}}</td>
+		    				<td>${{tarifa.precio}}*</td>
 		    			</tr>
 		    		</tbody>
 		    	</table>
@@ -31,7 +31,7 @@
 import info from '../data/info.js'
 
 	export default {
-		name: 'content-component',
+		name: 'contentComponent',
 		data(){
 			return {
 				tarifas: info.tarifas,
