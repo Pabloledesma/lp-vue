@@ -3,7 +3,9 @@ let info = {
         {"name":"Medellín, CO", "id":"MDE", "country": "CO"},
         {"name":"Cali, CO", "id":"CLO", "country": "CO"},
         {"name":"Bogotá, CO", "id":"BGO", "country": "CO"},
-        {"name":"Barranquilla, CO", "id":"BAQ", "country": "CO"}
+        {"name":"Barranquilla, CO", "id":"BAQ", "country": "CO"},
+        {"name":"Brasilia, BR", "id":"BSB", "country": "BR"},
+        {"name":"Rosario, AR", "id":"ROS", "country": "AR"}
     ],
                         
     tocities: [
@@ -13,7 +15,9 @@ let info = {
 		{"name":"Miami, US", "id":"MIA", "country": "US"},
 		{"name":"Tampa, US", "id":"TPA", "country": "US"},
 		{"name":"San José, CR", "id":"SJO", "country": "CR"},
-		{"name":"San Juan, PR", "id":"SJU", "country": "PR"}
+		{"name":"San Juan, PR", "id":"SJU", "country": "PR"},
+        {"name":"Brasilia, BR", "id":"BSB", "country": "BR"}
+
 		
     ],
 	copy_superior: "Compra tu boleto del 16 al 30 de diciembre del 2016 y viaja del 16 de diciembre del 2016 al 30 de junio del 2017.",

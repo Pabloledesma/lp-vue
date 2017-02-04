@@ -17,15 +17,15 @@
 
 			<div :class="{'form-group': true, 'col-md-6':true, 'has-error': errors.has('origin')}">
 			    <select 
-			    	v-model="origin" 
+			    	v-model="originIndex" 
 			    	v-validate 
 			    	data-vv-rules="required"
 			    	data-vv-as="ciudad de origen" 
 			    	name="origin"
-					class="form-control input-sm"
+					class="form-control"
 			    >
 			      	<option value="">Desde</option>
-			      	<option v-for="city in fromCities" :value="city.id">{{city.name}}</option>
+			      	<option v-for="(city, index) in fromCities" :value="city">{{city.name}}</option>
 			    </select>
 				<!-- <span v-show="errors.has('origin')" class="help is-danger">{{ errors.first('origin') }}</span> -->
 				<p v-show="errors.has('origin')" class="text-danger">{{ $t('messages.cityOriginNull') }}</p>
@@ -33,14 +33,14 @@
 
 			<div :class="{'form-group': true, 'col-md-6':true, 'has-error': errors.has('destination')}">
 			    <select 
-			    	v-model="destination" 
+			    	v-model="destinationIndex" 
 			    	v-validate 
 			    	data-vv-rules="required" 
 			    	name="destination"
 					class="form-control"
 			    >
 			      	<option value="">Hacia</option>
-			      	<option v-for="city in toCities" :value="city.id">{{city.name}}</option>
+			      	<option v-for="(city, index) in toCities" :value="city">{{city.name}}</option>
 			    </select>
 				<!-- <span v-show="errors.has('destination')" class="help is-danger">{{ errors.first('destination') }}</span> -->
 				<p v-show="errors.has('destination')" class="text-danger">{{ $t('messages.destinationCityNull') }}</p>
@@ -49,11 +49,11 @@
 			
 			<div class="col-md-12 radios">
 				<label class="radio-inline">
-				    <input type="radio" name="classOfTrip" value="business" v-model="classOfTrip">
+				    <input type="radio" name="classOfTrip" value="Business" v-model="classOfTrip">
 				    Clase ejecutiva
 				</label>
 				<label class="radio-inline">
-				    <input type="radio" name="classOfTrip" value="economy" v-model="classOfTrip">
+				    <input type="radio" name="classOfTrip" value="Economy" v-model="classOfTrip">
 				    Clase económica
 				</label>
 				
@@ -62,13 +62,13 @@
 			<div :class="{'form-group': true, 'col-md-6':true, 'has-error': errors.has('departureDate')}">
 				<label class="label">Salida</label>
 				<input 
-					type="text"
+					type="date"
 					id="departureDate" 
 					v-model="departureDate"
 					v-validate
 					data-vv-rules="required" 
 					name="departureDate"
-					class="form-control datepicker"
+					:class="{'form-control': true, 'datepicker': true, 'is-danger': errors.has('departureDate') }"
 				>
 				<!-- <span v-show="errors.has('departureDate')" class="help is-danger">{{ errors.first('departureDate') }}</span> -->
 				<p v-show="errors.has('departureDate')" class="text-danger">{{ $t('messages.departureDateRequired') }}</p>
@@ -78,13 +78,13 @@
 				<div :class="{'form-group': true, 'col-md-6':true, 'has-error': errors.has('returnDate')}" v-if="typeOfTrip == 'RT'">
 					<label class="label">Regreso</label>
 					<input
-						type="text"
+						type="date"
 						id="returnDate" 
 						v-model="returnDate" 
 						v-validate
 						data-vv-rules="required"
 						name="returnDate"
-						:class="{'input': true, 'is-danger': errors.has('returnDate') }"
+						:class="{'form-control': true, 'datepicker': true, 'is-danger': errors.has('returnDate') }"
 					>
 	
 					<p v-show="errors.has('returnDate')" class="text-danger">{{ $t('messages.returnDateRequired') }}</p>
@@ -126,8 +126,8 @@ import Datepicker from 'vuejs-datepicker'
 			return {
 				
 				typeOfTrip: 'RT',
-				origin: '',
-				destination: '',
+				originIndex: '',
+				destinationIndex: '',
 				classOfTrip: 'Economy',
 				departureDate: '',
 				returnDate: '',
@@ -223,35 +223,43 @@ import Datepicker from 'vuejs-datepicker'
 						this.childs+"&guestTypes[2].type=INF&guestTypes[2].amount="+
 						this.infants+"&pos=CM"+this.storeFront+"&lang="+ window.lang;
 
-				//console.log(url)
+				console.log(url)
 				window.open(url);
 			
         	}
 
 		},
 		computed: {
+			origin(){
+				return this.originIndex.id
+			},
+
+			destination(){
+				return this.destinationIndex.id
+			},
+
 			departureDay(){
-				return this.departureDate.getDate()
+				return new Date(this.departureDate).getDate() + 1
 			},
 
 			departureMonth(){
-				return this.departureDate.getMonth() + 1
+				return new Date(this.departureDate).getMonth() + 1
 			},
 
 			departureYear(){
-				return this.departureDate.getFullYear()
+				return new Date(this.departureDate).getFullYear()
 			},
 
 			returnDay(){
-				return this.returnDate.getDate()
+				return new Date(this.returnDate).getDate() + 1
 			},
 
 			returnMonth(){
-				return this.returnDate.getMonth() + 1
+				return new Date(this.returnDate).getMonth() + 1
 			},
 
 			returnYear(){
-				return this.returnDate.getFullYear()
+				return new Date(this.returnDate).getFullYear()
 			},
 
 			/**
@@ -274,20 +282,12 @@ import Datepicker from 'vuejs-datepicker'
 			},
 
 			/**
-			* Según los países seleccionados, se determinará el storefront (PENDIENTE)
+			* Según los países seleccionados, se determinará el storefront 
 			**/
 			storeFront(){
-				let selected = ''
-
-				for( let i=0; i < this.fromCities; i++){
-					for( key in this.fromCities[i] ){
-						if( this.fromCities[i][key].indexOf(this.origin) != -1 ){
-							selected = this.fromCities[i].country
-						}
-					}
-				}
-
-				if(selected != 'CO' || selected != 'BR' || selected != 'CA' || selected != 'US'){
+				let selected = this.originIndex.country
+				console.log("Seleccionado: " + selected)
+				if(selected != 'CO' && selected != 'BR' && selected != 'CA' && selected != 'US'){
 					return 'GS';
 				} else {
 					return selected;
@@ -298,7 +298,7 @@ import Datepicker from 'vuejs-datepicker'
 
 			// https://bookings.copaair.com/CMGS/AirLowFareSearchExternal.do?utm_campaign=undefined&d1=testPromotion&tripType=RT&outboundOption.originLocationCode=CLO&outboundOption.destinationLocationCode=LIM&outboundOption.departureDay=26&outboundOption.departureMonth=1&outboundOption.departureYear=2017&inboundOption.destinationLocationCode=CLO&inboundOption.originLocationCode=LIM&inboundOption.departureDay=26&inboundOption.departureMonth=1&inboundOption.departureYear=2017&flexibleSearch=true&cabinClass=economy&guestTypes[0].type=ADT&guestTypes[0].amount=1&guestTypes[1].type=CNN&guestTypes[1].amount=0&guestTypes[2].type=INF&guestTypes[2].amount=0&pos=CMGS&lang=es
 
-			// https://bookings.copaair.com/CMGS/AirLowFareSearchExternal.do?utm_campaign=testPromotion&d1=testPromotion&tripType=RT&outboundOption.originLocationCode=MGA&outboundOption.destinationLocationCode=SJO&outboundOption.departureDay=07&outboundOption.departureMonth=01&outboundOption.departureYear=2017&inboundOption.destinationLocationCode=MGA&inboundOption.originLocationCode=SJO&inboundOption.departureDay=15&inboundOption.departureMonth=02&inboundOption.departureYear=2017&flexibleSearch=true&cabinClass=Economy&guestTypes[0].type=ADT&guestTypes[0].amount=1&guestTypes[1].type=CNN&guestTypes[1].amount=0&guestTypes[2].type=INF&guestTypes[2].amount=0&pos=CMGS&lang=es
+			// https://bookings.copaair.com/CMGS/AirLowFareSearchExternal.do?utm_campaign=testPromotion&d1=testPromotion&tripType=RT&outboundOption.originLocationCode=MGA&outboundOption.destinationLocationCode=SJO&outboundOption.departureDay=07&outboundOption.departureMonth=01&outboundOption.departureYear=2017&inboundOption.destinationLocationCode=MGA&inboundOption.originLocationCode=SJO&inboundOption.departureDay=15&inboundOption.departureMonth=02&inboundOption.departureYear=2017&flexibleSearch=true&cabinClass=Economy&guestTypes[0].type=ADT&guestTypes[0].amount=1&guestTypes[1].type=CNN&guestTypes[1].amount=0&guestTypes[2].type=INF&guestTypes[2].amount=0&pos=CMBR&lang=pt
 		}
 		
 	}

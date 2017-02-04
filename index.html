@@ -58,19 +58,19 @@
 	      var s_code = s.t();
 	      if (s_code) document.write(s_code);
 
+	     // No funcionan los 2 calendarios simultáneamente
+		 // $( function() {
 
-		 $( function() {
+		 //    $( "#dapartureDate" ).datepicker({
+		 //      numberOfMonths: 1,
+		 //      showButtonPanel: false
+		 //    });
 
-		    $( "#dapartureDate" ).datepicker({
-		      numberOfMonths: 2,
-		      showButtonPanel: false
-		    });
-
-		    $( "#returnDate" ).datepicker({
-		      numberOfMonths: 2,
-		      showButtonPanel: false
-		    });
-		  } );
+		 //    $( "#returnDate" ).datepicker({
+		 //      numberOfMonths: 1,
+		 //      showButtonPanel: false
+		 //    });
+		 //  } );
     	</script>
     	<script src="dist/build.js"></script>
  	</body>
